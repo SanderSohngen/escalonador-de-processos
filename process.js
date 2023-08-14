@@ -7,13 +7,16 @@ class Process {
     this.priority = priority;
   }
 
-  async execute(time) {
+  async execute(time, interfaceManager) {
     return new Promise((resolve) => {
       this.remainingTime -= time;
       this.percentageComplete =
         ((this.executionTime - this.remainingTime) / this.executionTime) * 100;
-      document.getElementById('current-process').textContent = `Executando ${this.name}`;
-      setTimeout(() => resolve(), time * 1000);
+        interfaceManager.startProcessVisually(this)
+      setTimeout(() => {
+        interfaceManager.endProcessVisually(this);
+        resolve();
+      }, time * 1000);
     });
   }
 
@@ -22,8 +25,8 @@ class Process {
   }
 }
 
-class ProcessFactory {
-  #counter = 0;
+export default class ProcessFactory {
+  static #counter = 0;
 
   static createProcessWithValues(executionTime, priority) {
     this.#counter += 1;
@@ -31,8 +34,12 @@ class ProcessFactory {
     return new Process(name, executionTime, priority);
   }
 
+  static createCopiedProcess(process) {
+    return new Process(process.name, process.executionTime, process.priority);
+  }
+
   static createRandomProcess() {
-    const executionTime = Math.floor(Math.random() * 100) + 1;
+    const executionTime = Math.floor(Math.random() * 60) + 1;
     const priority = Math.floor(Math.random() * 10) + 1;
     return this.createProcessWithValues(executionTime, priority);
   }

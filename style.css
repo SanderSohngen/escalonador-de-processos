@@ -91,37 +91,18 @@ body {
 
 .process-queue {
     display: flex;
+    align-items: center;
+    margin-top: 20px;
     overflow-x: auto; /* Allows scrolling if the queue gets too long */
 }
 
-.process-item {
-    width: 20px;
-    height: 20px;
-    margin-right: 5px;
-    border-radius: 10px; /* Rounded edges */
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    display: inline-block;
-}
-
-
+.results-box th,
 .results-box th,
 .presults-box td {
-    font-size: 0.75em;
     padding: 8px;
     border-bottom: 1px solid #ccc;
+    margin: auto;
 }
-
-/* Priority Gradient Color for Process Priority */
-.priority-1 { background: #ff0000; }
-.priority-2 { background: #ff3300; }
-.priority-3 { background: #ff6600; }
-.priority-4 { background: #ff9900; }
-.priority-5 { background: #ffcc00; }
-.priority-6 { background: #ffff00; }
-.priority-7 { background: #ccff00; }
-.priority-8 { background: #99ff00; }
-.priority-9 { background: #66ff00; }
-.priority-10 { background: #00ff00; }
 
 .current-algorithm {
     font-size: 0.9em;
@@ -139,4 +120,46 @@ body {
     color: #333;
     margin-right: 5px;
 }
+
+.process-card {
+    border-radius: 10px;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Priority Gradient Color for Process Priority */
+.priority-1 { background-color: #fafafa; }
+.priority-2 { background-color: #f5f5f5; }
+.priority-3 { background-color: #eeeeee; }
+.priority-4 { background-color: #e0e0e0; }
+.priority-5 { background-color: #bdbdbd; }
+.priority-6 { background-color: #9e9e9e; }
+.priority-7 { background-color: #757575; }
+.priority-8 { background-color: #616161; }
+.priority-9 { background-color: #424242; }
+.priority-10 { background-color: #212121; }
+
+
+.process-name {
+    margin: 0;
+    font-family: 'San Francisco', Arial, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.priority-1 .process-name { color: #808080; }
+.priority-2 .process-name { color: #8c8c8c; }
+.priority-3 .process-name { color: #999999; }
+.priority-4 .process-name { color: #a6a6a6; }
+.priority-5 .process-name { color: #b3b3b3; }
+.priority-6 .process-name { color: #bfbfbf; }
+.priority-7 .process-name { color: #cccccc; }
+.priority-8 .process-name { color: #d9d9d9; }
+.priority-9 .process-name { color: #e6e6e6; }
+.priority-10 .process-name { color: #ffffff; }
+
 

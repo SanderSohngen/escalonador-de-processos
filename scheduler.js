@@ -5,83 +5,80 @@ class Scheduler {
     this.totalExecutionTime = 0;
   }
 
-  async run() {
+  async run(interfaceManager) {
     throw new Error("Método run deve ser implementado pela subclasse.");
   }
-
-  async indicateContextSwitch() {
-    return new Promise((resolve) => {
-      const contextSwitchIndicator = document.getElementById(
-        "context-switch-indicator"
-      );
-      contextSwitchIndicator.style.display = "block";
-      setTimeout(() => {
-        contextSwitchIndicator.style.display = "none";
-        resolve();
-      }, this.contextSwitchTime * 1000);
-    });
-  }
 }
 
-class FCFS extends Scheduler {
-  async run() {
+export class FCFS extends Scheduler {
+  async run(interfaceManager) {
     while (this.processQueue.length > 0) {
-      await this.indicateContextSwitch();
+      interfaceManager.updateVisualQueue(this.processQueue);
       const process = this.processQueue.shift();
-      await process.execute(process.remainingTime);
-      this.totalExecutionTime += process.executionTime + this.contextSwitchTime;
-      console.log(`Processo ${process.name} completado.`);
-    }
-    console.log(`Tempo total de execução: ${this.totalExecutionTime}`);
-  }
-}
 
-class SJF extends FCFS {
-  async run() {
-    this.processQueue.sort((a, b) => a.executionTime - b.executionTime);
-    await super.run();
-  }
-}
+      this.totalExecutionTime += process.remainingTime;
+      await process.execute(process.remainingTime, interfaceManager);
 
-class RR extends Scheduler {
-  constructor(processes, quantum, contextSwitchTime) {
-    super(processes, contextSwitchTime);
-    this.quantum = quantum;
-  }
-
-  async run() {
-    while (this.processQueue.length > 0) {
-      await this.indicateContextSwitch();
-      const process = this.processQueue.shift();
-      const executionTime = Math.min(this.quantum, process.remainingTime);
-      await process.execute(executionTime);
-      this.totalExecutionTime += executionTime + this.contextSwitchTime;
-
-      if (process.isComplete()) {
-        console.log(`Processo ${process.name} completado.`);
-      } else {
-        this.processQueue.push(process);
+      if (this.processQueue.length > 0) {
+        this.totalExecutionTime += this.contextSwitchTime;
+        await interfaceManager.indicateContextSwitch(this.contextSwitchTime);
       }
     }
-    console.log(`Tempo total de execução: ${this.totalExecutionTime}`);
+    interfaceManager.updateVisualQueue(this.processQueue);
   }
 }
 
-class PriorityRR extends Scheduler {
-  constructor(processes, quantum, contextSwitchTime) {
+export class SJF extends FCFS {
+  async run(interfaceManager) {
+    this.processQueue.sort((a, b) => a.executionTime - b.executionTime);
+    await super.run(interfaceManager);
+  }
+}
+
+export class RR extends Scheduler {
+  constructor(processes, contextSwitchTime, quantum) {
     super(processes, contextSwitchTime);
     this.quantum = quantum;
   }
 
-  async run() {
+  async run(interfaceManager) {
+    while (this.processQueue.length > 0) {
+      interfaceManager.updateVisualQueue(this.processQueue);
+      const process = this.processQueue.shift();
+      const executionTime = Math.min(this.quantum, process.remainingTime);
+
+      this.totalExecutionTime += executionTime;
+      await process.execute(executionTime, interfaceManager);
+
+      if (this.processQueue.length > 0) {
+        this.totalExecutionTime += this.contextSwitchTime;
+        await interfaceManager.indicateContextSwitch(this.contextSwitchTime);
+      }
+      if (!process.isComplete())
+        this.processQueue.push(process);
+    }
+    interfaceManager.updateVisualQueue(this.processQueue);
+  }
+}
+
+export class PriorityRR extends Scheduler {
+  constructor(processes, contextSwitchTime, quantum) {
+    super(processes, contextSwitchTime);
+    this.quantum = quantum;
+  }
+
+  async run(interfaceManager) {
     const priorityGroups = this.groupByPriority();
-    for (const priority in priorityGroups) {
-      const processes = priorityGroups[priority];
-      const rr = new RR(processes, this.quantum, this.contextSwitchTime);
-      await rr.run();
+    
+    const sortedPriorityGroups = Object.keys(priorityGroups)
+      .sort((a, b) => b - a)
+      .map(priority => priorityGroups[priority]);
+      
+    for (const processes of sortedPriorityGroups) {
+      const rr = new RR(processes, this.contextSwitchTime, this.quantum);
+      await rr.run(interfaceManager);
       this.totalExecutionTime += rr.totalExecutionTime;
     }
-    console.log(`Tempo total de execução: ${this.totalExecutionTime}`);
   }
 
   groupByPriority() {

@@ -1,111 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Process Manager</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&amp;display=swap"
+      rel="stylesheet"
+    />
+    <link href="style.css" rel="stylesheet" />
+  </head>
+
+  <body>
     <div class="container">
-        <h1>Process Manager</h1>
-        <div class="box-row">
-            <!-- Add Processes Box -->
-            <div class="box add-process-box">
-                <h2>Add Processes</h2>
-                <section class="input-controls">
-                    <div class="input-group">
-                        <label for="executionTime">Execution Time: <span id="executionTimeValue">50</span></label>
-                        <input type="range" id="executionTime" name="executionTime" min="1" max="60" value="50" oninput="updateSliderValue(this, 'executionTimeValue');" />
-                    </div>
-                    <div class="input-group">
-                        <label for="priority">Priority: <span id="priorityValue">5</span></label>
-                        <input type="range" id="priority" name="priority" min="1" max="10" value="5" oninput="updateSliderValue(this, 'priorityValue');" />
-                    </div>
-                </section>
-                <div class="button-group">
-                    <button id="addProcess">Add Process</button>
-                </div>
+      <h1>Process Manager</h1>
+      <div class="box-row">
+        <!-- Add Processes Box -->
+        <div class="box add-process-box">
+          <h2>Add Processes</h2>
+          <section class="input-controls">
+            <div class="input-group">
+              <label for="executionTime">
+                Execution Time:
+                <span id="executionTimeValue"> 10 </span>
+              </label>
+              <input
+                id="executionTime"
+                max="60"
+                min="1"
+                name="executionTime"
+                type="range"
+                value="10"
+              />
             </div>
-            <!-- Process Status Box -->
-            <div class="box process-status-box">
-                <h2>Process Status</h2>
-                <table id="processStatusTable">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Percentage Completed</th>
-                            <th>Time Estimated</th>
-                            <th>Priority</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Process Status Table Content Placeholder -->
-                    </tbody>
-                </table>
+            <div class="input-group">
+              <label for="priority">
+                Priority:
+                <span id="priorityValue"> 2 </span>
+              </label>
+              <input
+                id="priority"
+                max="10"
+                min="1"
+                name="priority"
+                type="range"
+                value="2"
+              />
             </div>
+          </section>
+          <div class="button-group">
+            <button id="addProcess">Add Process</button>
+          </div>
         </div>
-        <div class="box process-queue-box">
-            <h2>Process Queue</h2>
-            <div class="process-queue" id="processQueue">
-                <!-- Process Queue Items will be added here -->
-            </div>
-            <div class="current-algorithm">
-                <label>Algorithm: </label><span id="currentAlgorithm">None</span>
-            </div>
+        <!-- Process Status Box -->
+        <div class="box process-status-box">
+          <h2>Process Status</h2>
+          <table id="processStatusTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Percentage Completed</th>
+                <th>Time Estimated</th>
+                <th>Priority</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Process Status Table Content Placeholder -->
+            </tbody>
+          </table>
         </div>
-        <div class="box-row">
-            <!-- Algorithm Box -->
-            <div class="box algorithm-box">
-                <h2>Select Algorithm</h2>
-                <div class="algorithm-buttons">
-                    <button id="fcfs">FCFS</button>
-                    <button id="sjf">SJF</button>
-                    <button id="rr">RR</button>
-                    <button id="priorityRR">PriorityRR</button>
-                    <button id="compare">Compare</button>
-                </div>
-                <section class="input-controls">
-                    <div class="input-group">
-                        <label for="quantum">Quantum: <span id="quantumValue">5</span></label>
-                        <input type="range" id="quantum" name="quantum" min="1" max="10" value="5" oninput="updateSliderValue(this, 'quantumValue');" />
-                    </div>
-                    <div class="input-group">
-                        <label for="contextSwitchTime">Context Switch Time: <span id="contextSwitchTimeValue">2</span></label>
-                        <input type="range" id="contextSwitchTime" name="contextSwitchTime" min="1" max="5" value="2" oninput="updateSliderValue(this, 'contextSwitchTimeValue');" />
-                    </div>
-                </section>
-                <div class="button-group">
-                    <button id="startSimulation">Start</button>
-                    <button id="resetSimulation">Reset</button>
-                </div>
-            </div>
-            <!-- Results Box -->
-            <div class="box results-box">
-                <h2>Algorithm Results</h2>
-                <table id="algorithmResultsTable">
-                    <thead>
-                        <tr>
-                            <th>Algorithm</th>
-                            <th>Execution Time</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Algorithm Results Table Content Placeholder -->
-                    </tbody>
-                </table>
-            </div>
+      </div>
+      <div class="box process-queue-box">
+        <h2>Process Queue</h2>
+        <h4 id="current-status-indicator">Waiting</h4>
+        <div class="process-queue" id="processQueue">
+          <!-- Process Queue Items will be added here -->
         </div>
+        <div class="current-algorithm">
+          <label> Algorithm: </label>
+          <span id="currentAlgorithm"> None </span>
+        </div>
+      </div>
+      <div class="box-row">
+        <!-- Algorithm Box -->
+        <div class="box algorithm-box">
+          <h2>Algorithm settings</h2>
+          <section class="input-controls">
+            <div class="input-group">
+              <label for="quantum">
+                Quantum:
+                <span id="quantumValue"> 5 </span>
+              </label>
+              <input
+                id="quantum"
+                max="10"
+                min="1"
+                name="quantum"
+                type="range"
+                value="5"
+              />
+            </div>
+            <div class="input-group">
+              <label for="contextSwitchTime">
+                Context Switch Time:
+                <span id="contextSwitchTimeValue"> 2 </span>
+              </label>
+              <input
+                id="contextSwitchTime"
+                max="5"
+                min="1"
+                name="contextSwitchTime"
+                type="range"
+                value="2"
+              />
+            </div>
+          </section>
+          <div class="button-group">
+            <button id="startSimulation">Start</button>
+            <button id="resetSimulation">Reset</button>
+          </div>
+        </div>
+        <!-- Results Box -->
+        <div class="box results-box">
+          <h2>Algorithm Results</h2>
+          <table id="algorithmResultsTable">
+            <thead>
+              <tr>
+                <th>Algorithm</th>
+                <th>Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Algorithm Results Table Content Placeholder -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-    
     <!-- Scripts -->
-    <script>
-        function updateSliderValue(slider, outputId) {
-            document.getElementById(outputId).textContent = slider.value;
-        }
-    </script>
-    <script src="process.js"></script>
-    <script src="scheduler.js"></script>
-</body>
+    <script type="module" src="script.js"></script>
+
+  </body>
 </html>
