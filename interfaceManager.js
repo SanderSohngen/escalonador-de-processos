@@ -138,12 +138,6 @@ export default class InterfaceManager {
             );
     }
 
-    updateSliderValue(slider, outputId) {
-        const output = document.getElementById(outputId);
-        if (output)
-            output.textContent = slider.value;
-    }
-
     addProcessToVisualQueue(process) {
         const queueContainer = document.getElementById("processQueue");
         const processCard = document.createElement("div");

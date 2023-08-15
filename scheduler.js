@@ -6,7 +6,7 @@ class Scheduler {
   }
 
   async run(interfaceManager) {
-    throw new Error("Método run deve ser implementado pela subclasse.");
+    throw new Error();
   }
 }
 
@@ -77,8 +77,11 @@ export class PriorityRR extends Scheduler {
     for (const processes of sortedPriorityGroups) {
       const rr = new RR(processes, this.contextSwitchTime, this.quantum);
       await rr.run(interfaceManager);
-      this.totalExecutionTime += rr.totalExecutionTime;
+      this.totalExecutionTime += rr.totalExecutionTime
+      await interfaceManager.indicateContextSwitch(this.contextSwitchTime);
+      this.totalExecutionTime += this.contextSwitchTime;
     }
+    this.totalExecutionTime -= this.contextSwitchTime;
   }
 
   groupByPriority() {
