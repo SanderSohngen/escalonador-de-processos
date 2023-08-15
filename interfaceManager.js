@@ -107,6 +107,14 @@ export default class InterfaceManager {
         this.processQueue = [];
         this.clearAlgorithmTable();
         this.clearProcessTable();
+        this.resetNameTags();
+    }
+
+    resetNameTags() {
+        const algorithm = document.getElementById("currentAlgorithm");
+        algorithm.textContent = "None";
+        const status = document.getElementById("current-status-indicator");
+        status.textContent = "Waiting";
     }
 
     clearAlgorithmTable() {
